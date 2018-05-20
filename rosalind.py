@@ -4,6 +4,20 @@ import time
 def openfile(filename):
     start = time.time()
     with open(filename) as f:
+        data = f.readlines()
+        distance = 0
+        for i in range(0, len(data[0])-1):
+            if data[0][i] != data[1][i]:
+                distance += 1
+        print(distance)
+        end = time.time()
+        print(end - start)
+
+
+
+def gccontent(filename):
+    start = time.time()
+    with open(filename) as f:
         data = f.read().split(">")
         newdata = {}
         percentages = {}
@@ -30,4 +44,4 @@ def openfile(filename):
         print(round(newperc,6))
 
 
-openfile("rosalind_gc.txt")
+openfile("rosalind_hamm.txt")
