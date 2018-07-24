@@ -1,6 +1,7 @@
 __author__ = 'Luke'
 import os.path
 import time
+import re
 def openfile(filename):
     start = time.time()
     with open(filename) as f:
@@ -171,8 +172,52 @@ def findmotif(filename):
         str1 = ' '.join(points)
         print(str1)
 
+#Consensus and profile
+def consensus(filename):
+    with open(filename) as f:
+        lines = f.read()
+        slines = re.sub('\d', '', lines)
+        slines = slines.replace("\n", "").replace("", "").split(">Rosalind_")
+        slines.pop(0)
+        alist = ["A:"]
+        clist = ["C:"]
+        glist = ["G:"]
+        tlist = ["T:"]
+        ancestor = []
+        
+        for i in range(len(slines[0])):
+            alist.append(0)
+            clist.append(0)
+            glist.append(0)
+            tlist.append(0)
+            ancestor.append(" ")
+
+        for i in range(len(slines)):
+            for x in range(len(slines[i])):
+                if slines[i][x] == "A":
+                    alist[x+1] += 1
+                elif slines[i][x] == "C":
+                    clist[x+1] += 1
+                elif slines[i][x] == "G":
+                    glist[x+1] += 1
+                else:
+                    tlist[x+1] += 1
+
+        for i in range(1, len(alist)):
+            if alist[i] >= clist[i] and alist[i] >= glist[i] and alist[i] >= tlist[i]:
+                ancestor[i-1] = "A"
+            elif clist[i] > alist[i] and clist[i] >= glist[i] and clist[i] > tlist[i]:
+                ancestor[i-1] = "C"
+            elif glist[i] > alist[i] and glist > clist[i] and glist[i] > tlist[i]:
+                ancestor[i-1] = "G"
+            elif tlist[i] > alist[i] and tlist[i] >= clist[i] and tlist[i] >= glist[i]:
+                ancestor[i-1] = "T"
+                
+        print("".join(ancestor))
+        print(" ".join(str(a) for a in alist))
+        print(" ".join(str(c) for c in clist))
+        print(" ".join(str(g) for g in glist))
+        print(" ".join(str(t) for t in tlist))
 
 
-
-
-findmotif("rosalind_subs.txt")
+consensus("rosalind_cons.txt")
