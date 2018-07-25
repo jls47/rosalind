@@ -155,7 +155,24 @@ def rnaprotein(filename):
                 else:
                     protein += table[codon]
 
+#Finding all ocurrences of a motif in a strand of dna
+def findmotif(filename):
+    with open(filename) as f:
+        data = f.readline()
+        motif = f.readline()
+        points = []
+        print(motif)
+        for i in range(0, len(data)-len(motif)):
+            newmotif = ''
+            for x in range(i, i+len(motif)):
+                newmotif += data[x]
+            if motif == newmotif:
+                points.append(str(i+1))
+        str1 = ' '.join(points)
+        print(str1)
 
 
 
-rnaprotein("rosalind_prot.txt")
+
+
+findmotif("rosalind_subs.txt")
